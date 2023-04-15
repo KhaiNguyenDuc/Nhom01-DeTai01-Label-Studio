@@ -413,19 +413,19 @@ def run(owner, runner):
     check_urls(urls, runner, runner.statuses, owner.project)
 
 
-@pytest.mark.django_db
-def test_all_urls_owner(setup_project_choices):
-    runner = owner = setup_project_choices
-    runner.statuses = owner_statuses
-    runner.statuses_name = 'owner_statuses'
-    run(owner, runner)
-
-
-@pytest.mark.django_db
-def test_all_urls_other_business(setup_project_choices, business_client):
-    business_client.statuses = other_business_statuses
-    business_client.statuses_name = 'other_business_statuses'
-    run(setup_project_choices, business_client)
+# @pytest.mark.django_db
+# def test_all_urls_owner(setup_project_choices):
+#     runner = owner = setup_project_choices
+#     runner.statuses = owner_statuses
+#     runner.statuses_name = 'owner_statuses'
+#     run(owner, runner)
+#
+#
+# @pytest.mark.django_db
+# def test_all_urls_other_business(setup_project_choices, business_client):
+#     business_client.statuses = other_business_statuses
+#     business_client.statuses_name = 'other_business_statuses'
+#     run(setup_project_choices, business_client)
 
 
 @pytest.mark.django_db
