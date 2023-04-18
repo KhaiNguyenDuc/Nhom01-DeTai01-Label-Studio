@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from Utils.driver_connect import get_connection
 
-
+@pytest.mark.order(1)
 def test_signup_success():
     driver = get_connection()
 
@@ -14,7 +14,7 @@ def test_signup_success():
     signupBtn = driver.find_element(By.CLASS_NAME,'ls-button_look_primary')
     signupBtn.click()
 
-
+@pytest.mark.order(2)
 def test_email_invalid():
     driver = get_connection()
 
@@ -26,11 +26,11 @@ def test_email_invalid():
     signupBtn.click()
 
     driver.implicitly_wait(25)
-    error =  driver.find_element(By.CLASS_NAME, "field_errors")
+    error = driver.find_element(By.CLASS_NAME, "field_errors")
 
     assert error.text == "User with this email already exists"
 
-
+@pytest.mark.order(3)
 def test_password_invalid():
     driver = get_connection()
 
