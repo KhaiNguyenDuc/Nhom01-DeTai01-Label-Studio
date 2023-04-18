@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from Utils.driver_connect import get_connection
 
 @pytest.mark.order(1)
-def test_signup_success():
+def test_register_success():
     driver = get_connection()
 
     driver.get("http://127.0.0.1:8080/user/signup")
@@ -30,7 +30,6 @@ def test_email_invalid():
 
     assert error.text == "User with this email already exists"
 
-@pytest.mark.order(3)
 def test_password_invalid():
     driver = get_connection()
 
