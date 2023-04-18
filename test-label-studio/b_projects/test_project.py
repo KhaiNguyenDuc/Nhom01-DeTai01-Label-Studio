@@ -27,6 +27,7 @@ def test_create_project():
     driver.implicitly_wait(15)
     saveProjectBtn = driver.find_element(By.XPATH,"//button[contains(@class, 'ls-button') and text()='Save']")
     saveProjectBtn.click()
+    driver.close()
 
 def test_delete_project():
 
@@ -52,7 +53,7 @@ def test_delete_project():
     driver.implicitly_wait(15)
     saveProjectBtn = driver.find_element(By.XPATH,"//button[contains(@class, 'ls-button') and text()='Delete']")
     saveProjectBtn.click()
-
+    driver.close()
 
 
 

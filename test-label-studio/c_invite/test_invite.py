@@ -33,4 +33,4 @@ def test_invite():
     driver.implicitly_wait(15)
     addBtn = driver.find_element(By.XPATH, '//div/button[contains(@class, "ls-button_look_primary")]')
     addBtn.click()
-
+    driver.close()

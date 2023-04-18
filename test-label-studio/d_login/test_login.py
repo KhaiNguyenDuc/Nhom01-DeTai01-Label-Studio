@@ -11,6 +11,7 @@ def test_login_success():
     driver.find_element(By.NAME, "password").send_keys("k989898k")
     loginBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     loginBtn.click()
+    driver.close()
 
 def test_login_failure():
     driver = get_connection()
@@ -25,3 +26,4 @@ def test_login_failure():
     errorTxt = driver.find_element(By.CLASS_NAME, "error")
 
     assert errorTxt.text == "The email and password you entered don't match."
+    driver.close()

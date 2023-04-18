@@ -28,4 +28,4 @@ def test_render_organization():
     # Press people ls-email
     ls_email = driver.find_element(By.CLASS_NAME, 'ls-email')
     ls_email.click()
-
+    driver.close()

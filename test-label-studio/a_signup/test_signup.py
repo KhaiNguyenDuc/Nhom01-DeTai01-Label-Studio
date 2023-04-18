@@ -10,6 +10,7 @@ def test_control_signup_success():
     driver.find_element(By.NAME,"password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME,'ls-button_look_primary')
     signupBtn.click()
+    driver.close()
 
 def test_email_invalid():
     driver = get_connection()
@@ -25,6 +26,7 @@ def test_email_invalid():
     error = driver.find_element(By.CLASS_NAME, "field_errors")
 
     assert error.text == "User with this email already exists"
+    driver.close()
 
 def test_password_invalid():
     driver = get_connection()
@@ -39,5 +41,4 @@ def test_password_invalid():
     error = driver.find_element(By.CLASS_NAME, "field_errors")
 
     assert error.text == "Please enter a password 8-12 characters in length"
-
-
+    driver.close()
