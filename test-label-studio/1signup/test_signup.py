@@ -25,6 +25,7 @@ def test_email_invalid():
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
 
+    driver.implicitly_wait(25)
     error =  driver.find_element(By.CLASS_NAME, "field_errors")
 
     assert error.text == "User with this email already exists"
@@ -35,7 +36,7 @@ def test_password_invalid():
 
     driver.get("http://127.0.0.1:8080/user/signup")
 
-    driver.find_element(By.NAME, "email").send_keys("duckhailinux123@gmail.com")
+    driver.find_element(By.NAME, "email").send_keys("duckhailinux12@gmail.com")
     driver.find_element(By.NAME, "password").send_keys("1")
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
