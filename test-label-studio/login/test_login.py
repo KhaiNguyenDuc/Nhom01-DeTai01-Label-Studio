@@ -2,7 +2,6 @@ import pytest
 from selenium.webdriver.common.by import By
 from Utils.driver_connect import get_connection
 
-@pytest.fixture()
 def test_login_success():
     driver = get_connection()
 
