@@ -9,8 +9,8 @@ def test_signup_success():
 
     driver.get("http://127.0.0.1:8080/user/signup")
 
-    driver.find_element(By.NAME,"email").send_keys("duckhai12345@gmail.com")
-    driver.find_element(By.NAME,"password").send_keys("k989898k123")
+    driver.find_element(By.NAME,"email").send_keys("duckhailinux@gmail.com")
+    driver.find_element(By.NAME,"password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME,'ls-button_look_primary')
     signupBtn.click()
 
@@ -21,7 +21,7 @@ def test_email_invalid():
     driver.get("http://127.0.0.1:8080/user/signup")
 
     driver.find_element(By.NAME, "email").send_keys("duckhailinux@gmail.com")
-    driver.find_element(By.NAME, "password").send_keys("k989898k123")
+    driver.find_element(By.NAME, "password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
 
@@ -35,8 +35,8 @@ def test_password_invalid():
 
     driver.get("http://127.0.0.1:8080/user/signup")
 
-    driver.find_element(By.NAME, "email").send_keys("duckhailinux@gmail.com")
-    driver.find_element(By.NAME, "password").send_keys("k989898k")
+    driver.find_element(By.NAME, "email").send_keys("duckhailinux123@gmail.com")
+    driver.find_element(By.NAME, "password").send_keys("1")
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
 
