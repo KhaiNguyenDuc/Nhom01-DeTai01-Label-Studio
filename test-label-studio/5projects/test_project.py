@@ -1,7 +1,7 @@
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from Utils.driver_connect import get_connection
-
 
 def test_create_project():
 

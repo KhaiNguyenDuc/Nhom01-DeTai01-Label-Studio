@@ -1,3 +1,4 @@
+import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from Utils.driver_connect import get_connection
@@ -34,8 +35,8 @@ def test_password_invalid():
 
     driver.get("http://127.0.0.1:8080/user/signup")
 
-    driver.find_element(By.NAME, "email").send_keys("duckhai123@gmail.com")
-    driver.find_element(By.NAME, "password").send_keys("1")
+    driver.find_element(By.NAME, "email").send_keys("duckhailinux@gmail.com")
+    driver.find_element(By.NAME, "password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
 

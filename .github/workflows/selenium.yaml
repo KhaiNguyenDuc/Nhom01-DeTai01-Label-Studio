@@ -40,8 +40,9 @@ jobs:
         pip install webdriver_manager
 
     - name: Run Selenium tests
-      run: |
+      run: |       
+        python label_studio/manage.py migrate
+        python label_studio/manage.py collectstatic
+        python label_studio/manage.py runserver --noreload &
         cd test-label-studio 
         python -m pytest -vv -n auto
-
-

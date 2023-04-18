@@ -1,3 +1,4 @@
+import pytest
 from isodate import Duration
 from selenium import webdriver
 import time
@@ -56,10 +57,12 @@ def test_create_label_xml():
     saveBtn = driver.find_element(By.XPATH, '//button[contains(@class, "ls-button_look_primary") and text()="Save"]')
     saveBtn.click()
 
+
 def test_select_template():
     driver = get_connection()
 
     browse_label_interface(driver)
+
 
 def test_create_label_GUI():
 
@@ -75,6 +78,7 @@ def test_create_label_GUI():
     #Press save ls-button_look_primary
     saveBtn = driver.find_element(By.XPATH, '//button[contains(@class, "ls-button_look_primary") and text()="Save"]')
     saveBtn.click()
+
 
 def test_delete_label_GUI():
     driver = get_connection()

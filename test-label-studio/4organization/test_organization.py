@@ -1,15 +1,10 @@
-
-from isodate import Duration
-from selenium import webdriver
 import time
+
+import pytest
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.devtools.v109 import browser
-from selenium.webdriver.common.keys import Keys
-import sys
-from selenium.webdriver.support.wait import WebDriverWait
 from Utils.driver_connect import get_connection
 
-def test_invite():
+def test_render_organization():
     driver = get_connection()
 
     # Login
@@ -28,9 +23,9 @@ def test_invite():
     driver.implicitly_wait(15)
     li_organization = driver.find_element(By.XPATH,'//ul/li[2]')
     li_organization.click()
+    time.sleep(3)
 
-    # Press Add People
-    driver.implicitly_wait(15)
-    addBtn = driver.find_element(By.XPATH, '//div/button[contains(@class, "ls-button_look_primary")]')
-    addBtn.click()
+    # Press people ls-email
+    ls_email = driver.find_element(By.CLASS_NAME, 'ls-email')
+    ls_email.click()
 
