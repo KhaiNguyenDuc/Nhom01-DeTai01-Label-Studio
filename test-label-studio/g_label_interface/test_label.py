@@ -95,13 +95,18 @@ def test_delete_label_GUI():
     saveBtn.click()
     driver.close()
 
-# def test_config_label_color():
-#     driver = webdriver.Chrome()
-#     driver.maximize_window()
-#
-#     browse_label_interface(driver)
-#
-#     #Press label
-#     driver.implicitly_wait(20)
-#     label = driver.find_element(By.XPATH, '//ul/li[1]/input[contains(@type,"color")][1]').
-#     driver.close()
+def test_config_label_color():
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+
+    browse_label_interface(driver)
+
+    #Press label
+    driver.implicitly_wait(20)
+    # Find the first input element with the type "color" using XPath
+    first_color_input = driver.find_element(By.XPATH,'//input[@type="color"][1]')
+
+    # Change the color to black
+    first_color_input.send_keys("#000000")
+    time.sleep(2)
+    driver.close()
