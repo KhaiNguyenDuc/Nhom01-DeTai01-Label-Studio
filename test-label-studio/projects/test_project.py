@@ -89,5 +89,45 @@ def test_config_project():
     driver.find_element(By.XPATH, '//button[contains(@type, "submit")]').click()
     driver.close()
 
+def test_delete_exist_project():
+    driver = get_connection()
+    open_general_setting(driver)
 
 
+    # Press Danger Zone
+    driver.implicitly_wait(15)
+    lb_interface = driver.find_element(By.XPATH,
+                                       '//a[contains(@class, "ls-main-menu__item") and text()="Danger Zone"]')
+    lb_interface.click()
+
+    #Press delete project
+    delete_btn = driver.find_element(By.XPATH,'//button[contains(@class,"ls-button_look_danger") and text()="Delete Project"]')
+    delete_btn.click()
+
+    # Press proceed
+    driver.implicitly_wait(15)
+    proceed_btn = driver.find_element(By.XPATH, '//button[contains(@class,"ls-button_look_destructive") and text()="Proceed"]')
+    proceed_btn.click()
+    driver.close()
+
+def test_drop_tabs_exist_project():
+    driver = get_connection()
+    open_general_setting(driver)
+
+    # Press Danger Zone
+    driver.implicitly_wait(15)
+    lb_interface = driver.find_element(By.XPATH,
+                                       '//a[contains(@class, "ls-main-menu__item") and text()="Danger Zone"]')
+    lb_interface.click()
+
+    # Press delete project
+    delete_btn = driver.find_element(By.XPATH,
+                                     '//button[contains(@class,"ls-button_look_danger") and text()="Drop All Tabs"]')
+    delete_btn.click()
+
+    # Press proceed
+    driver.implicitly_wait(15)
+    proceed_btn = driver.find_element(By.XPATH,
+                                      '//button[contains(@class,"ls-button_look_destructive") and text()="Proceed"]')
+    proceed_btn.click()
+    driver.close()
