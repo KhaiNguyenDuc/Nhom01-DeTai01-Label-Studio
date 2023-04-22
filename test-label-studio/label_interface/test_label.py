@@ -63,7 +63,11 @@ def test_select_template():
     driver = get_connection()
 
     browse_label_interface(driver)
+    # Press save ls-button_look_primary
+    saveBtn = driver.find_element(By.XPATH, '//button[contains(@class, "ls-button_look_primary") and text()="Save"]')
+    saveBtn.click()
     driver.close()
+
 
 def test_create_label_GUI():
 

@@ -2,8 +2,10 @@ import time
 
 import pytest
 from selenium.webdriver.common.by import By
-from Utils.driver_connect import get_connection
+from selenium.webdriver.support.wait import WebDriverWait
 
+from Utils.driver_connect import get_connection
+from selenium.webdriver.support import expected_conditions as EC
 def test_render_organization():
     driver = get_connection()
 
@@ -23,9 +25,8 @@ def test_render_organization():
     driver.implicitly_wait(15)
     li_organization = driver.find_element(By.XPATH,'//ul/li[2]')
     li_organization.click()
-    time.sleep(3)
 
     # Press people ls-email
-    ls_email = driver.find_element(By.CLASS_NAME, 'ls-email')
+    ls_email = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'ls-email')))
     ls_email.click()
     driver.close()

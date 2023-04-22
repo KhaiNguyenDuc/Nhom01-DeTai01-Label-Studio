@@ -1,5 +1,6 @@
 import time
 
+import pytest
 from selenium.webdriver.common.by import By
 
 from Utils.driver_connect import get_connection
@@ -27,6 +28,7 @@ def get_current_token(driver):
     current_token = token_input.get_attribute("value")
     return current_token
 
+@pytest.mark.file_explorer
 def test_update_account_info():
     driver = get_connection()
 
@@ -36,7 +38,7 @@ def test_update_account_info():
     driver.find_element(By.NAME, "first_name").send_keys("Nguyễn Đức Khải")
     driver.find_element(By.NAME, "last_name").send_keys("Khải")
     driver.find_element(By.NAME, "phone").send_keys("0123456789")
-    driver.find_element(By.XPATH, '//input[contains(@class, "file-input")]').send_keys(r"C:\Users\duckh\OneDrive\Desktop\avatar.jpg")
+    driver.find_element(By.XPATH, '//input[contains(@class, "file-input")]').send_keys(r"K:\HCMUTE\Nam3_Repository\Nhom01-DeTai01-Label-Studio\test-label-studio\uploads\avatar.jpg")
     save_btn = driver.find_element(By.XPATH, '//button[contains(@class, "ls-button_look_primary") and text()="Save"]')
     save_btn.click()
 

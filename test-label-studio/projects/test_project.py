@@ -1,8 +1,9 @@
 import time
-
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from Utils.driver_connect import get_connection
 
 def open_general_setting(driver):
@@ -15,17 +16,21 @@ def open_general_setting(driver):
     # End Login
 
     # Press project button
-    driver.implicitly_wait(15)
-    first_button = driver.find_element(By.XPATH, "//button[contains(@class, 'ls-button_withIcon')]")
+    first_button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'ls-button_withIcon')]"))
+    )
+    # Click the import button
     first_button.click()
 
     # Press setting
     driver.implicitly_wait(15)
-    settings_link = driver.find_element(By.XPATH, '//a[contains(@class, "ls-main-menu__item") and text()="Settings"]')
+    settings_link = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//a[contains(@class, "ls-main-menu__item") and text()="Settings"]'))
+    )
+    # Click the setting link
     settings_link.click()
 
-
-
+@pytest.mark.last
 def test_create_project():
 
     driver = get_connection()
@@ -53,6 +58,7 @@ def test_create_project():
 
     driver.close()
 
+@pytest.mark.last
 def test_delete_project():
 
     driver = get_connection()
@@ -92,7 +98,6 @@ def test_config_project():
 def test_delete_exist_project():
     driver = get_connection()
     open_general_setting(driver)
-
 
     # Press Danger Zone
     driver.implicitly_wait(15)
