@@ -1,9 +1,6 @@
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
-  push:
-    branches:
-      - main
   pull_request:
       types: [opened, synchronize, reopened]
 name: Main Workflow
