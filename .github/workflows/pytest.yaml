@@ -27,5 +27,10 @@ jobs:
       - name: Run tests
         run: |
           cd label_studio
-          python -m pytest -vv -n auto
+          python -m pytest --html=report.html -vv -n auto --self-contained-html
         
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Report
+          path: label_studio/report.html
