@@ -37,6 +37,15 @@ jobs:
         name: sonarqube-report
         path: ./.scannerwork/report-task.txt
 
+    - name: SonarQube Pull Request Comment
+      if: always()
+      uses: campos-pay/sonarqube-pr-comment@main
+      with:
+       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+       SONAR_PROJECTKEY: label-studio
+       GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     # Optionally you can use the output from the Quality Gate in another step.
     # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
     - name: "Example show SonarQube Quality Gate Status value"
