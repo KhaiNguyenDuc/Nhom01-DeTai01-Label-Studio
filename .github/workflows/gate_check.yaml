@@ -27,18 +27,17 @@ jobs:
       with:
         scanMetadataReportFile: ./.scannerwork/report-task.txt
 
-    - name: Upload SonarQube report
-      uses: actions/upload-artifact@v2
-      with:
-        name: sonarqube-report
-        path: ./.scannerwork/report-task.txt
-
       # Force to fail step after specific time.
       timeout-minutes: 20
       env:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
-
+       
+    - name: Upload SonarQube report
+      uses: actions/upload-artifact@v2
+      with:
+        name: sonarqube-report
+        path: ./.scannerwork/report-task.txt
 
     # Optionally you can use the output from the Quality Gate in another step.
     # The possible outputs of the `quality-gate-status` variable are `PASSED`, `WARN` or `FAILED`.
