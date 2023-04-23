@@ -24,8 +24,6 @@ jobs:
     - name: SonarQube Quality Gate check
       id: sonarqube-quality-gate-check
       uses: sonarsource/sonarqube-quality-gate-action@master
-      with:
-        scanMetadataReportFile: ./.scannerwork/report-task.txt
 
       # Force to fail step after specific time.
       timeout-minutes: 20
