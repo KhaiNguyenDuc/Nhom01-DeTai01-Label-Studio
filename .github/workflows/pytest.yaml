@@ -23,6 +23,7 @@ jobs:
           pip install -e .
           pip install -r deploy/requirements.txt
           pip install -r deploy/requirements-test.txt
+          pip install pytest-html
 
       - name: Run tests
         run: |
