@@ -43,7 +43,7 @@ jobs:
       with:
        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-       SONAR_PROJECTKEY: label-studio
+       SONAR_PROJECTKEY: ${{ secrets.SONAR_PROJECT_KEYL }}
        GITHUB-TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Optionally you can use the output from the Quality Gate in another step.
