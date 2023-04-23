@@ -8,6 +8,7 @@ from selenium.webdriver.common.devtools.v109 import browser
 from selenium.webdriver.common.keys import Keys
 import sys
 
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from Utils.driver_connect import get_connection
@@ -24,12 +25,15 @@ def open_label_interface(driver):
 
     # Press create project button
     driver.implicitly_wait(15)
-    first_button = driver.find_element(By.XPATH, "//button[contains(@class, 'ls-button_withIcon')]")
-    first_button.click()
+    project = WebDriverWait(driver, 4).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='test label project']"))
+    )
+    project.click()
 
     # Press setting
     driver.implicitly_wait(15)
-    settings_link = driver.find_element(By.XPATH, '//a[contains(@class, "ls-main-menu__item") and text()="Settings"]')
+    settings_link = driver.find_element(By.XPATH, '//a[contains(@class, "ls-button_size_compact") and text()="Settings"]')
     settings_link.click()
 
     # Press label interface

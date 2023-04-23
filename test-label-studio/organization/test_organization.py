@@ -18,7 +18,7 @@ def test_render_organization():
     # End Login
 
     # Press logo
-    img_element = driver.find_element(By.XPATH, '//div[contains(@class, "ls-menu-header__trigger")]/img')
+    img_element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//div[contains(@class, "ls-menu-header__trigger")]/img')))
     img_element.click()
 
     # Press organization

@@ -1,5 +1,5 @@
 import time
-import pyautogui
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -17,7 +17,10 @@ def open_project_import_form(driver):
     # End Login
 
     # open project
-    project = driver.find_element(By.XPATH, "//div[contains(@class, 'ls-project-card')]")
+    project = WebDriverWait(driver, 4).until(
+        EC.element_to_be_clickable(
+            (By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='test project']"))
+    )
     project.click()
 
     # Wait until the import button is present and clickable
@@ -36,6 +39,7 @@ def test_import__dataset_url():
 
 
     # Upload files
+    driver.implicitly_wait(25)
     driver.find_element(By.NAME,"url").send_keys(r"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAc7xfOykQmrdNnp3s0CF4MFJLlQGtdZ1H6A&usqp=CAU")
     submit_btn = driver.find_element(By.XPATH, '//button[contains(@type,"submit")]')
     submit_btn.click()
@@ -52,14 +56,10 @@ def test_import__upload_files():
     driver = get_connection()
     open_project_import_form(driver)
 
-    # Upload files
-    upload_btn = driver.find_element(By.XPATH, '//button[contains(@class,"ls-upload_page__upload-button")]')
-    upload_btn.click()
-
-    time.sleep(2)
     # Choose file from file explorer
-    pyautogui.write(r"K:\HCMUTE\Nam3_Repository\Nhom01-DeTai01-Label-Studio\test-label-studio\uploads\ca_tim.jpg")
-    pyautogui.press('enter')
+    # Upload files
+    input_upload = driver.find_element(By.ID, 'file-input')
+    input_upload.send_keys(r"K:\HCMUTE\Nam3_Repository\Nhom01-DeTai01-Label-Studio\test-label-studio\uploads\ca_tim.jpg")
 
     # Save data
     save_btn = driver.find_element(By.XPATH, '//button[contains(@class,"ls-button_look_primary") and text()="Import"]')
