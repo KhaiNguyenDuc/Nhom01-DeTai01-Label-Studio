@@ -1,12 +1,9 @@
 import pytest
-from isodate import Duration
 from selenium import webdriver
 import time
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.devtools.v109 import browser
-from selenium.webdriver.common.keys import Keys
-import sys
+
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
