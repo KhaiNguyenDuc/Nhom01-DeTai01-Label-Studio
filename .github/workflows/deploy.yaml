@@ -1,53 +1,52 @@
-name: Dev deployment from Github to AWS
+name: Deploy
+
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+
+permissions: read-all
 
 jobs:
   deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Latest Repo
-        uses: actions/checkout@master
-        
-      - name: docker login
-        env:
-          DOCKER_USER: '${{ secrets.DOCKERHUB_USERNAME }}'
-          DOCKER_PASSWORD: '${{ secrets.DOCKERHUB_TOKEN }}'
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-     
-      - name: Build and push
-        run: |
-          DOCKER_BUILDKIT=1 docker build -t current_deploy .
-          docker tag current_deploy:latest nguyenduckhai/nhom1-label-studio
-          docker push nguyenduckhai/nhom1-label-studio
-          
-      # .github/workflows/main.yml continued
-      
-      - name: Get Timestamp
-        uses: gerred/actions/current-time@master
-        id: current-time
+    - uses: actions/checkout@v2 
 
-      - name: Run String Replace
-        uses: frabert/replace-string-action@master
-        id: format-time
-        with:
-          pattern: '[:\.]+'
-          string: "${{ steps.current-time.outputs.time }}"
-          replace-with: '-'
-          flags: 'g'
-
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v16
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: Deploy2
-          environment_name: Deploy2-env
-          version_label: "Sample-5"
-          region: ap-southeast-2
-          deployment_package: Dockerrun.aws.json
-          use_existing_version_if_available: true
+    - name: SSH into EC2 instance + deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
           
+          if [ ! -f /etc/docker/daemon.json ] || ! grep -q '"buildkit": true' /etc/docker/daemon.json; then
+            echo '{"features": {"buildkit": true}}' | sudo tee /etc/docker/daemon.json
+            sudo systemctl restart docker
+          fi
+          
+          if [ -d "Nhom01-DeTai01-Label-Studio" ]; then
+            cd Nhom01-DeTai01-Label-Studio
+            git pull https://github.com/KhaiNguyenDuc/Nhom01-DeTai01-Label-Studio.git && \echo "Pull completed"
+            cd ../
+          else
+            git clone https://github.com/KhaiNguyenDuc/Nhom01-DeTai01-Label-Studio.git && \echo "Clone completed"
+          fi
+          
+          sudo docker ps -a --filter ancestor=nhom1/label-studio --format "{{.ID}}" | xargs -r sudo docker stop && \echo "Stop completed"
+          sudo docker ps -a --filter ancestor=nhom1/label-studio --format "{{.ID}}" | xargs -r sudo docker rm && \echo "Remove completed"
+          
+          cd Nhom01-DeTai01-Label-Studio
+          chmod -R 755 ./deploy
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          sudo docker-compose down
+          sudo docker-compose up -d --build && \echo "Compose completed"
+          
+          sudo docker run -d -p 8080:8080 nhom1/label-studio 
