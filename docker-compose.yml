@@ -3,7 +3,7 @@ version: "3.9"
 services:
   nginx:
     build: .
-    image: heartexlabs/label-studio:latest
+    image: nhom1/label-studio:latest
     ports:
       - "8080:8085"
       - "8081:8086"
@@ -26,7 +26,7 @@ services:
     stdin_open: true
     tty: true
     build: .
-    image: heartexlabs/label-studio:latest
+    image: nhom1/label-studio:latest
     expose:
       - "8000"
     depends_on:
