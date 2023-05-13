@@ -6,7 +6,7 @@ from Utils.driver_connect import get_connection
 def test_signup_success():
     driver = get_connection()
     driver.get("http://127.0.0.1:8080/user/signup")
-    driver.find_element(By.NAME,"email").send_keys("duckhailinux1234567898896711gti2212@gmail.com")
+    driver.find_element(By.NAME,"email").send_keys("duckhailinux1234@gmail.com")
     driver.find_element(By.NAME,"password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME,'ls-button_look_primary')
     signupBtn.click()
@@ -17,7 +17,7 @@ def test_email_invalid():
 
     driver.get("http://127.0.0.1:8080/user/signup")
 
-    driver.find_element(By.NAME, "email").send_keys("duckhailinux1234567898896711gti2212@gmail.com")
+    driver.find_element(By.NAME, "email").send_keys("duckhailinux1234@gmail.com")
     driver.find_element(By.NAME, "password").send_keys("k989898k")
     signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
     signupBtn.click()
@@ -25,7 +25,7 @@ def test_email_invalid():
     driver.implicitly_wait(25)
     error = driver.find_element(By.CLASS_NAME, "field_errors")
 
-    assert error.text == "User with this email already exists"
+    assert error.text == "User with this email already exists in this server"
     driver.close()
 
 def test_password_invalid():
