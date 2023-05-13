@@ -8,6 +8,7 @@ import { isDefined } from "../../../utils/helpers";
 import { useUpdateEffect } from "../../../utils/hooks";
 import './PeopleList.styl';
 import { CopyableTooltip } from '../../../components/CopyableTooltip/CopyableTooltip';
+//import { InvitedList } from "./InvitedList";
 
 export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
   const api = useAPI();
@@ -21,7 +22,7 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
   const fetchUsers = useCallback(async (page, pageSize) => {
     const response = await api.callApi('memberships', {
       params: {
-        pk: 1,
+        pk: window.APP_SETTINGS.user.active_organization,
         contributed_to_projects: 1,
         page,
         page_size: pageSize,
@@ -58,19 +59,18 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
     <>
       <Block name="people-list">
         <Elem name="wrapper">
-
           {usersList ? (
             <Elem name="users">
               <Elem name="header">
                 <Elem name="column" mix="avatar"/>
                 <Elem name="column" mix="email">Email</Elem>
                 <Elem name="column" mix="name">Name</Elem>
+                <Elem name="column" mix="role">Role</Elem>
                 <Elem name="column" mix="last-activity">Last Activity</Elem>
               </Elem>
               <Elem name="body">
                 {usersList.map(({ user }) => {
                   const active = user.id === selectedUser?.id;
-
                   return (
                     <Elem key={`user-${user.id}`} name="user" mod={{ active }} onClick={() => selectUser(user)}>
                       <Elem name="field" mix="avatar">
@@ -83,6 +83,9 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
                       </Elem>
                       <Elem name="field" mix="name">
                         {user.first_name} {user.last_name}
+                      </Elem>
+                      <Elem name="field" mix="role">
+                        {user.role}
                       </Elem>
                       <Elem name="field" mix="last-activity">
                         {formatDistance(new Date(user.last_activity), new Date(), { addSuffix: true })}
@@ -98,6 +101,7 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
             </Elem>
           )}
         </Elem>
+
         <Pagination
           page={currentPage}
           urlParamName="page"

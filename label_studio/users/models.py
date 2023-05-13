@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
 from organizations.models import OrganizationMember, Organization
+from django.contrib.auth.models import Group
 from users.functions import hash_upload
 from core.utils.common import load_func
 from projects.models import Project
@@ -34,13 +35,10 @@ class UserManager(BaseUserManager):
         """
         if not email:
             raise ValueError('Must specify an email address')
-
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-
         user.set_password(password)
         user.save(using=self._db)
-
         return user
 
     def create_user(self, email, password=None, **extra_fields):
@@ -74,7 +72,6 @@ class UserLastActivityMixin(models.Model):
 
 UserMixin = load_func(settings.USER_MIXIN)
 
-
 class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin):
     """
     An abstract base class implementing a fully featured User model with
@@ -107,6 +104,8 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         on_delete=models.SET_NULL,
         related_name='active_users'
     )
+
+    role = models.CharField(_('role'),  max_length=256, blank=True)
 
     allow_newsletters = models.BooleanField(
         _('allow newsletters'),
@@ -198,7 +197,6 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         elif self.first_name and self.last_name:
             initials = self.first_name[0:1] + self.last_name[0:1]
         return initials
-
 
 @receiver(post_save, sender=User)
 def init_user(sender, instance=None, created=False, **kwargs):

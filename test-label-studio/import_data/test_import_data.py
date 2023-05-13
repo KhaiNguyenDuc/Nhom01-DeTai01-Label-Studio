@@ -18,8 +18,7 @@ def open_project_import_form(driver):
 
     # open project
     project = WebDriverWait(driver, 4).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='test project']"))
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ls-projects-page__link')][9]"))
     )
     project.click()
 
@@ -50,7 +49,7 @@ def test_import__dataset_url():
 
     driver.close()
 
-@pytest.mark.file_explorer
+
 def test_import__upload_files():
 
     driver = get_connection()

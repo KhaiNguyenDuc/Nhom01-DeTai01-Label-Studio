@@ -9,8 +9,10 @@ from django.shortcuts import redirect
 from django.contrib import auth
 from django.urls import reverse
 from django.core.files.images import get_image_dimensions
+from django.core.exceptions import PermissionDenied
 
-from organizations.models import Organization
+from organizations.models import Organization, InvitedPeople
+from django.contrib.auth.models import Group
 from core.utils.contextlog import ContextLog
 from core.utils.common import load_func
 
@@ -48,21 +50,39 @@ def check_avatar(files):
 
     return avatar
 
-
 def save_user(request, next_page, user_form):
     """ Save user instance to DB
     """
     user = user_form.save()
     user.username = user.email.split('@')[0]
-    user.save()
+    token = request.GET.get('token')
+    role_id=1
 
-    if Organization.objects.exists():
-        org = Organization.objects.first()
-        org.add_user(user)
+    # Đăng ký mà có mã token thì xác thực rồi mới add vô
+    if token:
+        if Organization.objects.exists():
+            org = Organization.objects.get(token=token)
+            if org:
+                member= InvitedPeople.objects.get(email=user.email, organization=org)
+                if member:
+                    role_id=member.role.id
+                    user.save()
+                    org.add_user(user)
+                else:
+                    raise PermissionDenied()
+
+            else:
+                raise PermissionDenied()
+            
+    # Đăng ký mà ko có mã token thì tạo mới luôn
     else:
-        org = Organization.create_organization(created_by=user, title='Label Studio')
+        user.save()
+        org = Organization.create_organization(created_by=user, title='Label Studio of ' + user.username)
+
     user.active_organization = org
-    user.save(update_fields=['active_organization'])
+    group = Group.objects.get(id=role_id)
+    user.role= group.name
+    user.save(update_fields=['active_organization', 'role'])
 
     request.advanced_json = {
         'email': user.email, 'allow_newsletters': user.allow_newsletters,
@@ -71,7 +91,6 @@ def save_user(request, next_page, user_form):
     redirect_url = next_page if next_page else reverse('projects:project-index')
     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
     return redirect(redirect_url)
-
 
 def proceed_registration(request, user_form, organization_form, next_page):
     """ Register a new user for POST user_signup

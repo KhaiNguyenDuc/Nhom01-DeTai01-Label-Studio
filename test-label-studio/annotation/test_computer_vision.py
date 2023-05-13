@@ -1,14 +1,10 @@
-import time
 
-import pytest
 from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Utils.driver_connect import get_connection
-from import_data.test_import_data import test_import__upload_files
-
 
 def open_annotation_interface(driver):
     # Login
@@ -22,7 +18,7 @@ def open_annotation_interface(driver):
     # open project
 
     project = WebDriverWait(driver, 4).until(
-        EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='computer vision project']"))
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ls-projects-page__link')][6]"))
     )
     project.click()
 
@@ -48,8 +44,7 @@ def open_label_all_task_interface(driver):
 
     # open project
     project = WebDriverWait(driver, 4).until(
-        EC.element_to_be_clickable(
-            (By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='computer vision project']"))
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ls-projects-page__link')][6]"))
     )
     project.click()
 
@@ -137,8 +132,6 @@ def test_annotate_all_task():
             actions.send_keys(Keys.DOWN).perform()
             actions.send_keys(Keys.DOWN).perform()
 
-
-            time.sleep(1)
             # Press labeling
             label = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.XPATH, '//span[contains(@class,"lsf-label_clickable")][1]'))

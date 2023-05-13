@@ -69,7 +69,6 @@ def _read_py(ls=False):
     finally:
         os.chdir(cwd)  # back to current dir
 
-
 # get commit info: message, date, hash, branch
 def get_git_commit_info(skip_os=True, ls=False):
 

@@ -5,12 +5,36 @@ import logging
 from django.db import models, transaction
 from django.conf import settings
 from django.db.models import Q, Count
+from django.contrib.auth.models import Group
 
 from django.utils.translation import gettext_lazy as _
 
 from core.utils.common import create_hash, get_organization_from_request, load_func
 
 logger = logging.getLogger(__name__)
+
+
+class InvitedPeople(models.Model):
+
+    email = models.CharField(_('email'), max_length=1000, null=False)
+    
+    role = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name='role',
+        help_text='Role'
+    )
+
+    organization = models.ForeignKey(
+        'organizations.Organization', on_delete=models.CASCADE,
+        help_text='Organization ID'
+    )
+
+    invited_at = models.DateTimeField(_('invited at'), auto_now_add=True)
+
+    def created_at_prettify(self):
+        return self.invited_at.strftime("%d %b %Y %H:%M:%S")
+
+    class Meta:
+        db_table = 'invited_people'
 
 
 class OrganizationMember(models.Model):
@@ -23,6 +47,11 @@ class OrganizationMember(models.Model):
     organization = models.ForeignKey(
         'organizations.Organization', on_delete=models.CASCADE,
         help_text='Organization ID'
+    )
+
+    role = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name='member_role',
+        help_text='Role', to_field='id', default=4
     )
     
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
@@ -54,6 +83,7 @@ class Organization(OrganizationMixin, models.Model):
     token = models.CharField(_('token'), max_length=256, default=create_hash, unique=True, null=True, blank=True)
 
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations", through=OrganizationMember)
+
         
     created_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
                                       null=True, related_name="organization", verbose_name=_('created_by'))
@@ -95,15 +125,22 @@ class Organization(OrganizationMixin, models.Model):
             return True
         return False
 
+# TODO: Thêm role chỗ này
     def add_user(self, user):
         if self.users.filter(pk=user.pk).exists():
             logger.debug('User already exists in organization.')
             return
-
+        member= InvitedPeople.objects.get(email=user.email)
         with transaction.atomic():
-            om = OrganizationMember(user=user, organization=self)
+            # Thêm vào tổ chức
+            om = OrganizationMember(user=user, organization=self, role=member.role)
             om.save()
-
+            # Xóa khỏi danh sách người được mời
+            member.delete()
+            # Thêm vào nhóm quyền
+            membergroup= Group.objects.get(id=member.role_id)
+            membergroup.user_set.add(user)
+            
             return om    
     
     def reset_token(self):
@@ -115,6 +152,11 @@ class Organization(OrganizationMixin, models.Model):
         """
         pass
 
+    def invitedToOrg(self, email, role):
+        member = InvitedPeople(email=email, role_id=role, organization=self)
+        member.save()
+        return member
+        
     def projects_sorted_by_created_at(self):
         return self.projects.all().order_by('-created_at').annotate(
             tasks_count=Count('tasks'),
@@ -126,7 +168,6 @@ class Organization(OrganizationMixin, models.Model):
 
     def per_project_invited_users(self):
         from users.models import User
-
         invited_ids = self.projects.values_list('members__user__pk', flat=True).distinct()
         per_project_invited_users = User.objects.filter(pk__in=invited_ids)
         return per_project_invited_users
@@ -138,6 +179,10 @@ class Organization(OrganizationMixin, models.Model):
     @property
     def members(self):
         return OrganizationMember.objects.filter(organization=self)
+
+    @property
+    def invited(self):
+        return InvitedPeople.objects.filter(organization=self)
 
     class Meta:
         db_table = 'organization'

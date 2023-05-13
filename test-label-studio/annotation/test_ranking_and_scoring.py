@@ -20,13 +20,10 @@ def open_annotation_interface(driver):
     # End Login
 
     # open project
-
     project = WebDriverWait(driver, 4).until(
-        EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='ranking and scoring project']"))
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ls-projects-page__link')][3]"))
     )
     project.click()
-
-
 
     # open annotation interface
     # Wait until the label button is present and clickable

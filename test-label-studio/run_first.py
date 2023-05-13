@@ -59,13 +59,25 @@ def create_project(driver,name,description,template,order,file):
 
 def test_init_data(driver):
 
-    # Login
-    driver.get("http://127.0.0.1:8080/user/login/")
+    # Register
+    driver.get("http://127.0.0.1:8080/user/signup")
     driver.find_element(By.NAME, "email").send_keys("duckhailinux@gmail.com")
     driver.find_element(By.NAME, "password").send_keys("k989898k")
-    loginBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
-    loginBtn.click()
-    # End Login
+    signupBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
+    signupBtn.click()
+
+    time.sleep(1)
+
+    # End Register
+
+
+    # # Login
+    # driver.get("http://127.0.0.1:8080/user/login/")
+    # driver.find_element(By.NAME, "email").send_keys("duckhailinux@gmail.com")
+    # driver.find_element(By.NAME, "password").send_keys("k989898k")
+    # loginBtn = driver.find_element(By.CLASS_NAME, 'ls-button_look_primary')
+    # loginBtn.click()
+    # # End Login
 
     create_project(driver, 'test project', 'test description', '"Semantic Segmentation with Polygons"', '1',r"K:\HCMUTE\Nam3_Repository\Nhom01-DeTai01-Label-Studio\test-label-studio\uploads\chanh.jpg")
     create_project(driver, 'test data project', 'test description', '"Semantic Segmentation with Polygons"', '1',r"K:\HCMUTE\Nam3_Repository\Nhom01-DeTai01-Label-Studio\test-label-studio\uploads\chanh.jpg")

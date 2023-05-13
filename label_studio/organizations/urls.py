@@ -21,6 +21,14 @@ _api_urlpattens = [
     path('<int:pk>', api.OrganizationAPI.as_view(), name='organization-detail'),
     # organization memberships list viewset
     path('<int:pk>/memberships', api.OrganizationMemberListAPI.as_view(), name='organization-memberships-list'),
+
+    # organization invited member viewset
+    path('<int:pk>/invitedmembers', api.OrganizationInvitedMemberListAPI.as_view(), name='organization-memberships-list'),
+
+    # role view set
+    path('listrole', api.GetRoleAddPermission.as_view(), name='role-base add permission'),
+    path('addperson', api.AddPeopleAPI.as_view(), name="add person to organization"),
+    path('detectrole', api.DetectRole.as_view(), name="detect role of logged in person"),
 ]
 
 # TODO: these urlpatterns should be moved in core/urls with include('organizations.urls')
