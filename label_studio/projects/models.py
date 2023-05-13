@@ -42,6 +42,7 @@ logger = logging.getLogger(__name__)
 
 class ProjectManager(models.Manager):
     def for_user(self, user):
+        # TODO: Xem lại chỗ này sửa sao cho đồng bộ vs cái Organization Member nha, nếu cái active_organize bị xóa đi
         return self.filter(organization=user.active_organization)
 
     COUNTER_FIELDS = [

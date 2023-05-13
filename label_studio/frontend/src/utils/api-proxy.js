@@ -54,6 +54,7 @@ export class APIProxy {
     * @param {APIProxyOptions} options
     */
   constructor(options) {
+    
     this.commonHeaders = options.commonHeaders ?? {};
     this.gateway = this.resolveGateway(options.gateway);
     this.requestMode = this.detectMode();
@@ -63,6 +64,7 @@ export class APIProxy {
     this.alwaysExpectJSON = options.alwaysExpectJSON ?? true;
 
     this.resolveMethods(options.endpoints);
+    console.log("resolve23")
   }
 
   /**
@@ -70,6 +72,7 @@ export class APIProxy {
     * @param {String} method
     */
   isValidMethod(method) {
+
     return this[method] instanceof Function;
   }
 
@@ -118,7 +121,6 @@ export class APIProxy {
   resolveMethods(endpoints, parentPath) {
     if (endpoints) {
       const methods = new Map(Object.entries(endpoints));
-
       methods.forEach((settings, methodName) => {
         const { scope, ...restSettings } = this.getSettings(settings);
 
@@ -274,7 +276,7 @@ export class APIProxy {
         enumerable: false,
         writable: false,
       });
-
+    
       return responseResult;
     };
   }
@@ -322,6 +324,7 @@ export class APIProxy {
     * @private
     */
   createUrl(endpoint, data = {}, parentPath) {
+    
     const url = new URL(this.gateway);
     const usedKeys = [];
     const { path: resolvedPath, method: resolvedMethod } = this.resolveEndpoint(
@@ -361,6 +364,7 @@ export class APIProxy {
       });
     }
 
+    console.log('Link cuối: '+url.toString())
     return {
       url: url.toString(),
       method: resolvedMethod,
@@ -475,7 +479,7 @@ export class APIProxy {
 
         response = await settings.mock(url, params ?? {}, fakeRequest);
       } catch (err) {
-        console.error(err);
+        console.error('Lỗi rồi: '+err);
         ok = false;
       }
 

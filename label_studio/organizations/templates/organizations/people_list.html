@@ -9,7 +9,7 @@
   {
     breadcrumbs: [
       {
-        title: "People"
+        title: "People in organization"
       }
     ],
   }
@@ -28,7 +28,6 @@
     <div v-if="users && !users.length">
       No users found :(
     </div>
-
 
     <table class="users" v-if="users && users.length">
       <colgroup>
@@ -54,8 +53,6 @@
         </tr>
       </tbody>
     </table>
-
-
     <div v-if="selected" class="user-info">
       <button class="close" @click="select(null)">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -98,11 +95,9 @@
 
   </div>
   <script>
-    var app; // vue app
-
+    var app, app1; // vue app
     (function() {
       console.log("Execute inline script");
-
       const API = {
         users: {
           getAll() {
@@ -138,6 +133,17 @@
         [2 * MINUTE, 'this hour'],
         [0, 'just now'],
       ];
+
+      // app1 = new Vue({
+      //   el:'#invited',
+      //   data: () => ({
+      //     fields: [
+      //       { name: 'email', title: 'Email' },
+      //       { name: 'role', title: 'Role' },
+      //       { name: 'invited_at', title: 'Invited At'},
+      //     ],
+      //   })
+      // })
 
       app = new Vue({
         el: '#users',

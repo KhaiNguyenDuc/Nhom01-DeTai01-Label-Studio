@@ -18,9 +18,7 @@ from users.functions import proceed_registration
 from organizations.models import Organization
 from organizations.forms import OrganizationSignupForm
 
-
 logger = logging.getLogger()
-
 
 @login_required
 def logout(request):
@@ -31,7 +29,6 @@ def logout(request):
             redirect_url += '/'
         return redirect(redirect_url)
     return redirect('/')
-
 
 @enforce_csrf_checks
 def user_signup(request):
@@ -49,14 +46,15 @@ def user_signup(request):
 
     # make a new user
     if request.method == 'POST':
-        organization = Organization.objects.first()
-        if settings.DISABLE_SIGNUP_WITHOUT_LINK is True:
-            if not(token and organization and token == organization.token):
-                raise PermissionDenied()
-        else:
-            if token and organization and token != organization.token:
-                raise PermissionDenied()
-
+        if token:
+            organization = Organization.objects.filter(token=token)
+            if settings.DISABLE_SIGNUP_WITHOUT_LINK is True:
+                if not(token and organization.exists()):
+                    raise PermissionDenied()
+            else:
+                if not(token and organization.exists()):
+                    raise PermissionDenied()
+                
         user_form = forms.UserSignupForm(request.POST)
         organization_form = OrganizationSignupForm(request.POST)
 
@@ -64,6 +62,8 @@ def user_signup(request):
             redirect_response = proceed_registration(request, user_form, organization_form, next_page)
             if redirect_response:
                 return redirect_response
+        else:
+            print (user_form.errors)
 
     return render(request, 'users/user_signup.html', {
         'user_form': user_form,
@@ -71,7 +71,6 @@ def user_signup(request):
         'next': next_page,
         'token': token,
     })
-
 
 @enforce_csrf_checks
 def user_login(request):
@@ -106,7 +105,6 @@ def user_login(request):
         'form': form,
         'next': next_page
     })
-
 
 @login_required
 def user_account(request):

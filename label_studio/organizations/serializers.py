@@ -5,7 +5,8 @@ import ujson as json
 from rest_framework import serializers
 from drf_dynamic_fields import DynamicFieldsMixin
 
-from organizations.models import Organization, OrganizationMember
+from organizations.models import Organization, OrganizationMember, InvitedPeople
+from django.contrib.auth.models import Group
 from users.serializers import UserSerializer
 from collections import OrderedDict
 
@@ -55,6 +56,10 @@ class UserSerializerWithProjects(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('created_projects', 'contributed_to_projects')
 
+class GroupSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Group
+        fields = ['id','name',]
 
 class OrganizationMemberUserSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """Adds all user properties"""
@@ -65,11 +70,22 @@ class OrganizationMemberUserSerializer(DynamicFieldsMixin, serializers.ModelSeri
         fields = ['id', 'organization', 'user']
 
 
+
+class OrganizationInvitedMemberSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
+    """Adds all user properties"""
+    role_name= serializers.ReadOnlyField(source='role.name')
+    class Meta:
+        model = InvitedPeople
+        fields = ['id', 'organization', 'email', 'role_name', 'invited_at']
+
 class OrganizationInviteSerializer(serializers.Serializer):
     token = serializers.CharField(required=False)
     invite_url = serializers.CharField(required=False)
 
-
 class OrganizationsParamsSerializer(serializers.Serializer):
     active = serializers.BooleanField(required=False, default=False)
     contributed_to_projects = serializers.BooleanField(required=False, default=False)
+
+class ResponseSerializer(serializers.Serializer):
+    error = serializers.CharField(required=False)
+    state = serializers.CharField(required=False)

@@ -28,7 +28,6 @@ def get_current_token(driver):
     current_token = token_input.get_attribute("value")
     return current_token
 
-@pytest.mark.file_explorer
 def test_update_account_info():
     driver = get_connection()
 

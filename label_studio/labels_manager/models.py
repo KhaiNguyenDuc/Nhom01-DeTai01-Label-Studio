@@ -3,7 +3,6 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
-
 class Label(models.Model):
     created_at = models.DateTimeField(_('Created at'), auto_now_add=True, help_text='Time of label creation')
     updated_at = models.DateTimeField(_('Updated at'), auto_now=True, help_text='Time of label modification')
@@ -23,7 +22,7 @@ class Label(models.Model):
     approved = models.BooleanField(default=False, help_text='Status of label')
     projects = models.ManyToManyField('projects.Project', through='LabelLink')
     organization = models.ForeignKey('organizations.Organization', related_name='labels', on_delete=models.CASCADE)
-
+# TODO: Suy nghĩ thêm về cái này, có thể lấy Organization member để tham chiếu qua luôn thì tốt hơn.
     def has_permission(self, user):
         return self.organization_id == user.active_organization_id
 
@@ -31,7 +30,6 @@ class Label(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['title', 'organization'], name='unique_title')
         ]
-
 
 class LabelLink(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)

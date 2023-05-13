@@ -78,6 +78,12 @@
         "decorators": ""
     },
     {
+        "url": "/api/organizations/<int:pk>/invitedmembers",
+        "module": "organizations.api.OrganizationInvitedMemberListAPI",
+        "name": "organizations:api:organization-invited-member-list",
+        "decorators": ""
+    },
+    {
         "url": "/api/invite",
         "module": "organizations.api.OrganizationInviteAPI",
         "name": "organizations:organization-invite",
@@ -351,6 +357,12 @@
         "url": "/api/projects/<int:pk>/exports/<int:export_pk>/download",
         "module": "data_export.api.ExportDownloadAPI",
         "name": "data_export:api-projects:project-exports-download",
+        "decorators": ""
+    },
+    {
+        "url": "/api/projects/<int:pk>/exports/<int:export_pk>/convert",
+        "module": "data_export.api.ExportConvertAPI",
+        "name": "data_export:api-projects:project-exports-convert",
         "decorators": ""
     },
     {

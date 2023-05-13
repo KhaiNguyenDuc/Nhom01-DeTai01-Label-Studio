@@ -3,9 +3,15 @@
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 from .models import User
 from core.utils.common import load_func
+
+class GroupSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Group
+        fields = ['id','name',]
 
 
 class BaseUserSerializer(FlexFieldsModelSerializer):
@@ -33,6 +39,7 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
         return self.context[key][uid]
 
     class Meta:
+
         model = User
         fields = (
             'id',
@@ -45,9 +52,9 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
             'initials',
             'phone',
             'active_organization',
+            'role',
             'allow_newsletters'
         )
-
 
 class UserSimpleSerializer(BaseUserSerializer):
     class Meta:

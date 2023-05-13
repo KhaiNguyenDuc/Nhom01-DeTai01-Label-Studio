@@ -1,13 +1,10 @@
-import time
 
-import pytest
-from selenium.common import NoSuchElementException, TimeoutException
-from selenium.webdriver import Keys, ActionChains
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Utils.driver_connect import get_connection
-from import_data.test_import_data import test_import__upload_files
+
 
 
 def open_annotation_interface(driver):
@@ -22,9 +19,11 @@ def open_annotation_interface(driver):
     # open project
 
     project = WebDriverWait(driver, 4).until(
-        EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'ls-project-card__title-text') and text()='structured Data Parsing project']"))
+        EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ls-projects-page__link')][2]"))
     )
     project.click()
+
+
 
 
 
