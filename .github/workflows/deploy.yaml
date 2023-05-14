@@ -30,9 +30,11 @@ jobs:
           if [ -d "Nhom01-DeTai01-Label-Studio" ]; then
             cd Nhom01-DeTai01-Label-Studio
             git pull https://github.com/KhaiNguyenDuc/Nhom01-DeTai01-Label-Studio.git && \echo "Pull completed"
+            wait
             cd ../
           else
             git clone https://github.com/KhaiNguyenDuc/Nhom01-DeTai01-Label-Studio.git && \echo "Clone completed"
+            wait
           fi
           
           sudo docker ps -a --filter ancestor=nhom1/label-studio --format "{{.ID}}" | xargs -r sudo docker stop && \echo "Stop completed"
