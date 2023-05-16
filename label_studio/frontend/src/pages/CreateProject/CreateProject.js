@@ -117,7 +117,7 @@ export const CreateProject = ({ onClose }) => {
     <Modal onHide={onDelete} fullscreen visible bare closeOnClickOutside={false}>
       <div className={rootClass}>
         <Modal.Header>
-          <h1>Create Project</h1>
+          <h1>Create Project Nhom 1</h1>
           <ToggleItems items={steps} active={step} onSelect={setStep} />
 
           <Space>
